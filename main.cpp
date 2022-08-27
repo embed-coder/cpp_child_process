@@ -17,21 +17,21 @@ int main(int argc, char const *argv[]) {
     if (child_pid >= 0) {
         if (0 == child_pid) {       /* Child process*/
             printf("Im the child process, my PID: %d\n", getpid());
-            sleep(3);
-
+            sleep(10);
         } else {                     /* Parent process*/
-                rv = wait(&status);
-                if (rv == -1) {
-                    printf("wait() unsuccessful\n");
-                }
+            printf("\nI'm the parent process, waiting for exit signal from Child process\n");
+            rv = wait(&status);
+            if (rv == -1) {
+                printf("wait() unsuccessful\n");
+            }
 
-                printf("\nIm the parent process, PID child process: %d\n", rv);
-                
-                if (WIFEXITED(status)) {
-                    printf("Normally termination, status=%d\n", WEXITSTATUS(status));
-                } else if (WIFSIGNALED(status)) {
-                    printf("killed by signal, value = %d\n", WTERMSIG(status));
-                } 
+            printf("\nIm the parent process, PID child process: %d\n", rv);
+            
+            if (WIFEXITED(status)) {
+                printf("Normally termination, status=%d\n", WEXITSTATUS(status));
+            } else if (WIFSIGNALED(status)) {
+                printf("killed by signal, value = %d\n", WTERMSIG(status));
+            } 
         }
     } else {
         printf("fork() unsuccessfully\n");      // fork() return -1 if error.
